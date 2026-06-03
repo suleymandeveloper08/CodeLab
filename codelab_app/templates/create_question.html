@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Sorag Soramak{% endblock %}
+
+{% block style %}
+    /* RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to right, #e0f2f1, #ffffff);
+      color: #004d40;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* HEADER */
+    body.dark-mode {
+        background: #2a2a2a;
+        color: #a5d6a7;
+      }
+
+      header {
+        background: linear-gradient(90deg, #004d40, #00796b);
+        color: white;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 77, 64, 0.3);
+        transition: background 0.3s;
+      }
+      body.dark-mode header {
+        background: linear-gradient(90deg, #00332a, #005d50);
+      }
+
+      .container1 {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.8rem;
+        text-decoration: none;
+        color: white;
+        user-select: none;
+      }
+      .logo img {
+        height: 40px;
+        margin-right: 10px;
+        max-width: 40px;
+        max-height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .brand-text {
+        color: #ffffffff;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+
+      .brand-text .blue {
+        color: #04b698;
+        font-family: sans-serif;
+        font-weight: bold;
+      }
+
+      nav {
+        position: relative;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 25px;
+      }
+      .nav-links li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        color: #b2dfdb;
+        outline: none;
+      }
+      body.dark-mode .nav-links li a {
+        color: #a5d6a7;
+      }
+      body.dark-mode .nav-links li a:hover,
+      body.dark-mode .nav-links li a:focus {
+        color: #81c784;
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 6px;
+        user-select: none;
+        transition: background-color 0.3s ease;
+        z-index: 1100;
+      }
+      .nav-toggle:hover,
+      .nav-toggle:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        outline: none;
+      }
+      .nav-toggle span {
+        height: 3px;
+        width: 28px;
+        background: white;
+        border-radius: 3px;
+        transition: all 0.4s ease;
+        transform-origin: center;
+      }
+      .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+      }
+
+      body.dark-mode .nav-toggle span {
+        background: #a5d6a7;
+      }
+
+      footer {
+        background-color: #263238;
+        color: white;
+        text-align: center;
+        padding: 18px 15px;
+        font-size: 14px;
+        user-select: none;
+        flex-shrink: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        margin-top: auto;
+        transition: background-color 0.3s;
+      }
+      body.dark-mode footer {
+        background-color:  #004d40;
+      }
+
+      @media (max-width: 768px) {
+        .nav-toggle {
+          display: flex;
+        }
+        .nav-links {
+          flex-direction: column;
+          background-color: #004d40;
+          position: fixed;
+          top: 60px;
+          right: 0;
+          width: 75%;
+          max-width: 320px;
+          height: 100vh;
+          padding-top: 30px;
+          box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+          transform: translateX(100%);
+          transition: transform 0.35s ease-in-out;
+          z-index: 1500;
+        }
+        .nav-links.active {
+          transform: translateX(0);
+        }
+        .nav-links li {
+          margin-bottom: 25px;
+          text-align: center;
+        }
+        .nav-links li a {
+          font-size: 1.3rem;
+          color: #b2dfdb;
+          font-weight: 700;
+          transition: color 0.3s ease;
+        }
+        .nav-links li a:hover,
+        .nav-links li a:focus {
+          color: #e0f2f1;
+          outline: none;
+        }
+      }
+      /* Ana İçerik (Main) Stilleri */
+      main {
+          flex-grow: 1; /* Sayfanın geri kalan boşluğunu doldurur */
+          max-width: 800px;
+          margin: 40px auto;
+          padding: 20px;
+          background-color: #ffffff; /* Açık modda beyaz arka plan */
+          border-radius: 12px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          transition: background-color 0.3s, box-shadow 0.3s;
+      }
+
+      body.dark-mode main {
+          background-color: #2a2a2a; /* Koyu modda koyu yeşilimsi gri */
+          /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); */
+          border: solid #04b698;
+          color: white;
+      }
+
+      main h1 {
+          font-size: 2.5rem;
+          color: #004d40;
+          margin-bottom: 20px;
+          text-align: center;
+          border-bottom: 2px solid #e0f2f1;
+          padding-bottom: 10px;
+          transition: color 0.3s;
+      }
+
+      body.dark-mode main h1 {
+          color: white;
+          border-bottom: 2px solid #04b698;
+      }
+
+      .form-container {
+          padding: 20px;
+      }
+
+      .form-container p {
+          margin-bottom: 15px;
+      }
+
+      .form-container label {
+          display: block;
+          font-weight: 600;
+          margin-bottom: 8px;
+          color: #004d40;
+          transition: color 0.3s;
+      }
+
+      body.dark-mode .form-container label {
+          color: white;
+      }
+
+      .form-container input[type="text"],
+      .form-container input[type="email"],
+      .form-container input[type="file"],
+      .form-container textarea {
+          width: 100%;
+          padding: 12px;
+          border: 1px solid #b2dfdb;
+          border-radius: 8px;
+          font-size: 1rem;
+          color: #333;
+          background-color: #f5f5f5;
+          transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+      }
+
+      body.dark-mode .form-container input,
+      body.dark-mode .form-container textarea {
+          border-color: #005d50;
+          background-color: #004d40;
+          color: #e0f2f1;
+      }
+
+      .form-container input:focus,
+      .form-container textarea:focus {
+          border-color: #00796b;
+          box-shadow: 0 0 8px rgba(0, 121, 107, 0.3);
+          outline: none;
+      }
+
+      body.dark-mode .form-container input:focus,
+      body.dark-mode .form-container textarea:focus {
+          border-color: #81c784;
+          box-shadow: 0 0 8px rgba(129, 199, 132, 0.4);
+      }
+
+      .form-container button[type="submit"] {
+          display: block;
+          width: 100%;
+          padding: 15px;
+          font-size: 1.1rem;
+          font-weight: bold;
+          color: white;
+          background-color: #00796b;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          margin-top: 20px;
+          transition: background-color 0.3s, transform 0.2s;
+          box-shadow: 0 4px 6px rgba(0, 121, 107, 0.2);
+      }
+
+      .form-container button[type="submit"]:hover {
+          background-color: #00695c;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 10px rgba(0, 121, 107, 0.3);
+      }
+
+      body.dark-mode .form-container button[type="submit"] {
+          background-color: #2a2a2a;
+          color: white;
+          border: solid #04b698;
+          /* box-shadow: 0 4px 6px rgba(165, 214, 167, 0.3); */
+      }
+
+      body.dark-mode .form-container button[type="submit"]:hover {
+          background-color: #81c784;
+          box-shadow: 0 6px 10px rgba(165, 214, 167, 0.4);
+      }
+{% endblock %}
+{% block content %}
+    <main>
+        <h1>Sorag Soramak</h1>
+        <div class="form-container">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Soragy goş</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

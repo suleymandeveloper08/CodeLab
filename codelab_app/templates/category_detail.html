@@ -1,0 +1,396 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{category.name}}{% endblock %}
+
+{% block style%}
+    /* RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to right, #e0f2f1, #ffffff);
+      color: #004d40;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* HEADER */
+    body.dark-mode {
+        background: #2a2a2a;
+        color: #a5d6a7;
+      }
+
+      header {
+        background: linear-gradient(90deg, #004d40, #00796b);
+        color: white;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 77, 64, 0.3);
+        transition: background 0.3s;
+      }
+      body.dark-mode header {
+        background: linear-gradient(90deg, #00332a, #005d50);
+      }
+
+      .container1 {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.8rem;
+        text-decoration: none;
+        color: white;
+        user-select: none;
+      }
+      .logo img {
+        height: 40px;
+        margin-right: 10px;
+        max-width: 40px;
+        max-height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .brand-text {
+        color: #ffffffff;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+
+      .brand-text .blue {
+        color: #04b698;
+        font-family: sans-serif;
+        font-weight: bold;
+      }
+
+      nav {
+        position: relative;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 25px;
+      }
+      .nav-links li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        color: #b2dfdb;
+        outline: none;
+      }
+      body.dark-mode .nav-links li a {
+        color: #a5d6a7;
+      }
+      body.dark-mode .nav-links li a:hover,
+      body.dark-mode .nav-links li a:focus {
+        color: #81c784;
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 6px;
+        user-select: none;
+        transition: background-color 0.3s ease;
+        z-index: 1100;
+      }
+      .nav-toggle:hover,
+      .nav-toggle:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        outline: none;
+      }
+      .nav-toggle span {
+        height: 3px;
+        width: 28px;
+        background: white;
+        border-radius: 3px;
+        transition: all 0.4s ease;
+        transform-origin: center;
+      }
+      .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+      }
+
+      body.dark-mode .nav-toggle span {
+        background: #a5d6a7;
+      }
+
+      footer {
+        background-color: #263238;
+        color: white;
+        text-align: center;
+        padding: 18px 15px;
+        font-size: 14px;
+        user-select: none;
+        flex-shrink: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        margin-top: auto;
+        transition: background-color 0.3s;
+      }
+      body.dark-mode footer {
+        background-color:  #004d40;
+      }
+
+      @media (max-width: 768px) {
+        .nav-toggle {
+          display: flex;
+        }
+        .nav-links {
+          flex-direction: column;
+          background-color: #004d40;
+          position: fixed;
+          top: 60px;
+          right: 0;
+          width: 75%;
+          max-width: 320px;
+          height: 100vh;
+          padding-top: 30px;
+          box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+          transform: translateX(100%);
+          transition: transform 0.35s ease-in-out;
+          z-index: 1500;
+        }
+        .nav-links.active {
+          transform: translateX(0);
+        }
+        .nav-links li {
+          margin-bottom: 25px;
+          text-align: center;
+        }
+        .nav-links li a {
+          font-size: 1.3rem;
+          color: #b2dfdb;
+          font-weight: 700;
+          transition: color 0.3s ease;
+        }
+        .nav-links li a:hover,
+        .nav-links li a:focus {
+          color: #e0f2f1;
+          outline: none;
+        }
+      }
+
+    /* Main content */
+    main.main-content {
+      max-width: 800px;
+      margin: 40px auto 60px auto;
+      padding: 20px;
+      background: rgba(255 255 255 / 0.95);
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0, 121, 107, 0.15);
+      color: #004d40;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark-mode main.main-content {
+      background: #2a2a2a;
+      color: white;
+      border: solid #04b698; 
+    }
+
+    main.main-content h1 {
+      color: inherit;
+      border-bottom: 2px solid currentColor;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 2.4rem;
+      user-select: none;
+    }
+    main.main-content p {
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    .chapters-list {
+      list-style: none;
+      padding: 0;
+    }
+    .chapters-list li {
+      background-color: rgba(245, 255, 250, 0.85);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s, transform 0.3s;
+      cursor: pointer;
+      user-select: none;
+    }
+    .chapters-list li:hover {
+      background-color: rgba(230, 255, 240, 0.9);
+      transform: translateY(-3px);
+    }
+    body.dark-mode .chapters-list li {
+      background-color: rgba(0, 77, 64, 0.3);
+      border: 1px solid rgba(165, 214, 167, 0.25);
+    }
+    body.dark-mode .chapters-list li:hover {
+      background-color: rgba(0, 121, 107, 0.45);
+    }
+    .chapters-list h3 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: inherit;
+    }
+    .chapter-link {
+      text-decoration: none;
+      font-weight: 600;
+      color: #00796b;
+      transition: color 0.3s;
+      user-select: text;
+    }
+    .chapter-link:hover {
+      color: #004d40;
+    }
+    body.dark-mode .chapter-link {
+      color: #81c784;
+    }
+
+    .action-links {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .action-link, .quiz-link {
+      background-color: #00796b;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(0, 121, 107, 0.3);
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      user-select: none;
+    }
+    .action-link:hover, .quiz-link:hover {
+      background-color: #004d40;
+      transform: translateY(-4px);
+    }
+    .quiz-link {
+      background-color: #d32f2f;
+    }
+    .quiz-link:hover {
+      background-color: #b71c1c;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #263238;
+      color: white;
+      text-align: center;
+      padding: 18px 15px;
+      font-size: 14px;
+      user-select: none;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+      margin-top: auto;
+      transition: background-color 0.3s;
+    }
+    body.dark-mode footer {
+        background-color: #004d40;
+    }
+    /* Completed status ortara göçürilen görnüşde */
+.completed-status {
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  display: inline-block;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
+  transition: background 0.3s, color 0.3s;
+  margin-left: auto;   /* statusy ortara (sag tarapa) süýşürýär */
+  margin-right: 15px;  /* sagdaky link bilen aralygy saklaýar */
+}
+body.dark-mode .completed-status {
+  background: rgba(129, 199, 132, 0.15);
+  color: #81c784;
+  border: 1px solid rgba(129, 199, 132, 0.4);
+}
+/* Görkez link stil */
+.chapters-list a {
+  background-color: #00796b;
+  color: #ffffff;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 121, 107, 0.25);
+}
+.chapters-list a:hover {
+  background-color: #004d40;
+  transform: translateY(-3px);
+}
+body.dark-mode .chapters-list a {
+  background-color: #04b698;
+  color: #1c1c1c;
+}
+body.dark-mode .chapters-list a:hover {
+  background-color: #029179;
+  color: #ffffff;
+}
+{% endblock %}
+
+{% block content %}
+<main class="main-content">
+  <div class="action-links">
+    <a href="{% url 'create_learning_plan' category_slug=category.slug %}" class="action-link">Şahsy okuw meýilnamasyny döret</a>
+    <a href="{% url 'quiz_view' category_slug=category.slug %}" class="quiz-link">Men bu dili bilýän</a>
+  </div>
+  <h1>{{ category.name }}</h1>
+  <p>{{ category.description }}</p>
+
+  <h2>Bölümler</h2>
+  {% if chapters %}
+    <ul class="chapters-list">
+      {% for item in chapters %}
+        <li>
+          <h3>{{ item.chapter.title }}</h3>
+          {% if item.is_completed %}
+            <p class="completed-status">✓ Tamamlandy</p>
+          {% endif %}
+          <a href="{% url 'chapter_detail' category_slug=category.slug chapter_slug=item.chapter.slug %}">Görkez</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Bu kategoriýada hiç hili bölüm ýok.</p>
+  {% endif %}
+
+  
+</main>
+{% endblock %}

@@ -1,0 +1,368 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Soraglar{% endblock %}
+
+{% block style %}
+    /* RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to right, #e0f2f1, #ffffff);
+      color: #004d40;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* HEADER */
+    body.dark-mode {
+        background: #2a2a2a;
+        color: #a5d6a7;
+      }
+
+      header {
+        background: linear-gradient(90deg, #004d40, #00796b);
+        color: white;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 77, 64, 0.3);
+        transition: background 0.3s;
+      }
+      body.dark-mode header {
+        background: linear-gradient(90deg, #00332a, #005d50);
+      }
+
+      .container1 {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.8rem;
+        text-decoration: none;
+        color: white;
+        user-select: none;
+      }
+      .logo img {
+        height: 40px;
+        margin-right: 10px;
+        max-width: 40px;
+        max-height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .brand-text {
+        color: #ffffffff;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+
+      .brand-text .blue {
+        color: #04b698;
+        font-family: sans-serif;
+        font-weight: bold;
+      }
+
+      nav {
+        position: relative;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 25px;
+      }
+      .nav-links li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        color: #b2dfdb;
+        outline: none;
+      }
+      body.dark-mode .nav-links li a {
+        color: #a5d6a7;
+      }
+      body.dark-mode .nav-links li a:hover,
+      body.dark-mode .nav-links li a:focus {
+        color: #81c784;
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 6px;
+        user-select: none;
+        transition: background-color 0.3s ease;
+        z-index: 1100;
+      }
+      .nav-toggle:hover,
+      .nav-toggle:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        outline: none;
+      }
+      .nav-toggle span {
+        height: 3px;
+        width: 28px;
+        background: white;
+        border-radius: 3px;
+        transition: all 0.4s ease;
+        transform-origin: center;
+      }
+      .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+      }
+
+      body.dark-mode .nav-toggle span {
+        background: #a5d6a7;
+      }
+
+      footer {
+        background-color: #263238;
+        color: white;
+        text-align: center;
+        padding: 18px 15px;
+        font-size: 14px;
+        user-select: none;
+        flex-shrink: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        margin-top: auto;
+        transition: background-color 0.3s;
+      }
+      body.dark-mode footer {
+        background-color:  #004d40;
+      }
+
+      @media (max-width: 768px) {
+        .nav-toggle {
+          display: flex;
+        }
+        .nav-links {
+          flex-direction: column;
+          background-color: #004d40;
+          position: fixed;
+          top: 60px;
+          right: 0;
+          width: 75%;
+          max-width: 320px;
+          height: 100vh;
+          padding-top: 30px;
+          box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+          transform: translateX(100%);
+          transition: transform 0.35s ease-in-out;
+          z-index: 1500;
+        }
+        .nav-links.active {
+          transform: translateX(0);
+        }
+        .nav-links li {
+          margin-bottom: 25px;
+          text-align: center;
+        }
+        .nav-links li a {
+          font-size: 1.3rem;
+          color: #b2dfdb;
+          font-weight: 700;
+          transition: color 0.3s ease;
+        }
+        .nav-links li a:hover,
+        .nav-links li a:focus {
+          color: #e0f2f1;
+          outline: none;
+        }
+      }
+      /* MAIN STIL */
+main {
+  flex-grow: 1;
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.question-container {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 25px;
+  backdrop-filter: blur(8px);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+body.dark-mode .question-container {
+  background: #2a2a2a;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  color: white;
+  border: solid #04b698;
+}
+
+.question-title {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.question-meta {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+body.dark-mode .question-meta {
+  color: #b2dfdb;
+}
+
+.question-image img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.answers-container {
+  margin-top: 30px;
+}
+body.dark-mode .answers-container h2 {
+  margin-bottom: 15px;
+  color: white;
+}
+.answer-item {
+  background: rgba(255,255,255,0.7);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+body.dark-mode .answer-item {
+  background: #2a2a2a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  color: white;
+  border: solid #04b698;
+}
+.answer-meta {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 8px;
+}
+body.dark-mode .answer-meta {
+  color: white;
+}
+.answer-content {
+  line-height: 1.6;
+}
+
+.answer-form-container {
+  margin-top: 25px;
+  background: rgba(255,255,255,0.8);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+body.dark-mode .answer-form-container {
+  background: #2a2a2a;
+  color: white;
+  border: solid #04b698;
+}
+
+.answer-form-container form input,
+.answer-form-container form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+body.dark-mode .answer-form-container form input,
+body.dark-mode .answer-form-container form textarea {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: solid #04b698;
+}
+
+.answer-form-container button {
+  background: #00796b;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+body.dark-mode .answer-form-container button{background:#2a2a2a;color:white;border:solid #04b698;}
+.answer-form-container button:hover {
+  background: #004d40;
+}
+
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="question-container">
+            <h1 class="question-title">{{ question.title }}</h1>
+            <p class="question-meta">
+                Sorag berdi: {{ question.user.username }} |
+                Senesi: {{ question.created_at|date:"F d, Y" }}
+            </p>
+            <div class="question-content">
+                <p>{{ question.content }}</p>
+                {% if question.image %}
+                    <div class="question-image">
+                        <img src="{{ question.image.url }}" alt="{{ question.title }} soragy üçin surat" />
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="answers-container">
+            <h2>Jogaplar ({{ answers.count }})</h2>
+            {% for answer in answers %}
+                <div class="answer-item">
+                    <p class="answer-meta">
+                        Jogap berdi: {{ answer.user.username }} |
+                        Senesi: {{ answer.created_at|date:"F d, Y, P" }}
+                    </p>
+                    <p class="answer-content">{{ answer.content }}</p>
+                </div>
+            {% empty %}
+                <p>Bu soraga entek hiç hili jogap ýok.</p>
+            {% endfor %}
+        </div>
+        
+        {% if user.is_authenticated %}
+            <div class="answer-form-container">
+                <h2>Jogabyňyzy ýazyň</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ answer_form.as_p }}
+                    <button type="submit">Jogaby Goş</button>
+                </form>
+            </div>
+        {% else %}
+            <p>Jogap ýazmak üçin <a href="{% url 'login' %}">giriň</a>.</p>
+        {% endif %}
+    </main>
+{% endblock %}

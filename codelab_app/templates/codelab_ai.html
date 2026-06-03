@@ -1,0 +1,685 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>CodeLab AI Chatbot</title>
+    <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(to right, #e0f2f1, #ffffff); 
+        color: #004d40;
+        transition: background 0.5s, color 0.5s;
+    }
+
+    body.dark-mode {
+        background: #2a2a2a; 
+        color: #e0f2f1; 
+    }
+
+    header {
+        background: linear-gradient(90deg, #004d40, #00796b);
+        color: white;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 77, 64, 0.3);
+        transition: background 0.3s;
+    }
+    body.dark-mode header {
+        background: linear-gradient(90deg, #00332a, #005d50);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .container1 {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 0 15px;
+    }
+    .logo {
+        display: flex; align-items: center; font-size: 1.8rem; text-decoration: none; color: white; user-select: none;
+    }
+    .logo img {
+        height: 40px; margin-right: 10px; max-width: 40px; max-height: 40px; border-radius: 50%; object-fit: cover;
+    }
+
+    .brand-text { color: #ffffffff; font-family: sans-serif; font-weight: bold; font-size: 20px; }
+    .brand-text .blue { color: #04b698; font-family: sans-serif; font-weight: bold; }
+
+    nav { position: relative; }
+    
+    .nav-links { 
+        list-style-type: none;
+        list-style: none;
+        display: flex; 
+        gap: 25px; 
+    } 
+    .nav-links li a {
+        color: white; text-decoration: none; font-weight: 600; transition: color 0.3s;
+    }
+    .nav-links li a:hover,
+    .nav-links li a:focus { color: #b2dfdb; outline: none; }
+
+    body.dark-mode .nav-links li a { color: #a5d6a7; }
+    body.dark-mode .nav-links li a:hover,
+    body.dark-mode .nav-links li a:focus { color: #81c784; }
+
+    .nav-toggle { 
+        display: none; 
+        flex-direction: column; 
+        cursor: pointer; 
+        gap: 6px; 
+        padding: 8px; 
+        border-radius: 6px; 
+        user-select: none; 
+        transition: background-color 0.3s ease; 
+        z-index: 1100;
+    }
+    .nav-toggle span {
+        display: block; width: 25px; height: 3px; background: white; border-radius: 3px; transition: transform 0.3s, opacity 0.3s;
+    }
+    body.dark-mode .nav-toggle span { background: #a5d6a7; }
+    
+    .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    footer {
+        background-color: #263238;
+        color: white;
+        text-align: center;
+        padding: 18px 15px;
+        font-size: 14px;
+        user-select: none;
+        flex-shrink: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        margin-top: auto;
+        transition: background-color 0.3s;
+    }
+    body.dark-mode footer { background-color: #004d40; }
+
+    @media (max-width: 768px) {
+      .nav-toggle {
+        display: flex;
+      }
+      .nav-links {
+        flex-direction: column;
+        background-color: #004d40;
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 75%;
+        max-width: 320px;
+        height: 100vh;
+        padding-top: 30px;
+        box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+        transform: translateX(100%);
+        transition: transform 0.35s ease-in-out;
+        z-index: 1500;
+        
+        list-style-type: none; 
+        list-style: none; 
+      }
+      .nav-links.active {
+        transform: translateX(0);
+      }
+      .nav-links li {
+        margin-bottom: 25px;
+        text-align: center;
+      }
+      .nav-links li a {
+        font-size: 1.3rem;
+        color: #b2dfdb;
+        font-weight: 700;
+        transition: color 0.3s ease;
+      }
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        color: #e0f2f1;
+        outline: none;
+      }
+      
+      header {
+          padding: 10px 15px;
+      }
+      
+      .logo {
+          font-size: 1.6rem;
+      }
+      .logo img {
+          height: 35px;
+          max-width: 35px;
+      }
+    }
+
+    @media (max-width: 480px) {
+        .logo {
+            font-size: 1.4rem; 
+        }
+        .logo img {
+            height: 30px; 
+            max-width: 30px;
+            margin-right: 5px;
+        }
+
+        #darkModeToggle {
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+        
+        .nav-links {
+            width: 90%;
+            max-width: none;
+        }
+        
+        /* Footer-i kiçeltmek */
+        footer {
+            padding: 15px 10px;
+            font-size: 12px;
+        }
+    }
+
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    
+    #chat-container {
+        display: flex; flex-direction: column; height: 75vh; max-width: 900px; margin: 30px auto; 
+        background-color: #ffffff; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); border-radius: 16px; 
+        overflow: hidden; border: 1px solid #e0f2f1; transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    body.dark-mode #chat-container {
+        background-color: #1e1e1e; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7); border: 1px solid #004d40;
+    }
+
+    #chat-history {
+        flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
+    }
+
+    .message {
+        max-width: 90%; padding: 12px 16px; border-radius: 16px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
+        line-height: 1.6; transition: background-color 0.3s, color 0.3s; word-wrap: break-word; 
+        font-size: 1rem;
+    }
+
+    .user-message {
+        align-self: flex-end; background-color: #00796b; color: white; border-bottom-right-radius: 4px;
+    }
+    body.dark-mode .user-message {
+        background-color: #04b698; color: #121212;
+    }
+
+    .ai-message {
+        align-self: flex-start; background-color: #f1f5f9; color: #1f2937; border-bottom-left-radius: 4px;
+    }
+    body.dark-mode .ai-message {
+        background-color: #2a2a2a; color: #e0f2f1;
+    }
+    
+    #input-area {
+        display: flex; padding: 16px; border-top: 1px solid #d1d5db; background-color: #ffffff; 
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+    body.dark-mode #input-area {
+        background-color: #1e1e1e; border-top-color: #3a3a3a;
+    }
+
+    #user-input {
+        flex-grow: 1; padding: 12px 16px; border: 2px solid #00796b; border-radius: 25px; 
+        margin-right: 12px; font-size: 16px; background-color: #f9f9f9; color: #004d40; 
+        transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    #user-input:focus { border-color: #004d40; box-shadow: 0 0 8px rgba(0, 77, 64, 0.3); }
+    body.dark-mode #user-input {
+        background-color: #333333; border-color: #04b698; color: white;
+    }
+    body.dark-mode #user-input:focus {
+        border-color: #81c784; box-shadow: 0 0 10px rgba(129, 199, 132, 0.5);
+    }
+
+    #send-button {
+        background-color: #00796b; color: white; padding: 12px 20px; border: none; 
+        border-radius: 25px; cursor: pointer; font-weight: 700; 
+        transition: background-color 0.2s, transform 0.2s; display: flex; 
+        align-items: center; justify-content: center; min-width: 80px;
+    }
+
+    #send-button:hover { background-color: #004d40; transform: translateY(-1px); }
+    body.dark-mode #send-button { background-color: #04b698; }
+    body.dark-mode #send-button:hover { background-color: #00796b; }
+
+    #send-button:disabled { background-color: #9ca3af; cursor: not-allowed; transform: none; }
+
+    .loader {
+        border: 4px solid #f3f3f3; border-top: 4px solid #04b698; border-radius: 50%; width: 20px; 
+        height: 20px; animation: spin 1s linear infinite;
+    }
+    body.dark-mode .loader {
+        border: 4px solid #333333; border-top: 4px solid #81c784;
+    }
+
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    #header {
+        background-color: #00796b; color: white; padding: 16px; text-align: center; 
+        border-top-left-radius: 16px; border-top-right-radius: 16px; transition: background-color 0.3s;
+    }
+    #header h1 { font-size: 20px; font-weight: 700; margin: 0; }
+    body.dark-mode #header { background-color: #004d40; }
+    
+    .ai-message code {
+        background-color: rgba(0, 77, 64, 0.1); padding: 2px 4px; border-radius: 4px;
+        font-family: 'Consolas', 'Courier New', monospace; color: #004d40;
+    }
+    body.dark-mode .ai-message code {
+        background-color: rgba(4, 182, 152, 0.2); color: #a5d6a7;
+    }
+    
+    
+    @media (max-width: 900px) {
+        #chat-container {
+            position: fixed;
+            max-width: 95%;
+            margin: 20px auto;
+        }
+    }
+
+    @media (max-width: 600px) {
+        #chat-container {
+            border-radius: 0;
+            height: 90vh; 
+            margin: 0; 
+            max-width: 100%; 
+        }
+
+        #chat-history {
+            padding: 10px; 
+            gap: 10px;
+        }
+
+        .message {
+            padding: 10px 14px; 
+            font-size: 0.9rem;
+        }
+        
+        #input-area {
+            padding: 10px;
+        }
+
+        #user-input {
+            padding: 10px 14px;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        #send-button {
+            padding: 10px 15px;
+            min-width: 70px;
+            font-size: 14px;
+        }
+    }
+    .ai-message {
+    position: relative;
+    align-self: flex-start;
+    background: linear-gradient(135deg, #e0f2f1 0%, #ffffff 100%);
+    color: #004d40;
+    border-left: 5px solid #04b698;
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 0 4px 10px rgba(0, 77, 64, 0.1);
+    font-size: 1rem;
+    line-height: 1.6;
+    animation: fadeInUp 0.4s ease;
+}
+
+body.dark-mode .ai-message {
+    background: linear-gradient(135deg, #1c1c1c 0%, #2a2a2a 100%);
+    color: #d6f4ef;
+    border-left: 5px solid #04b698;
+    box-shadow: 0 4px 14px rgba(4, 182, 152, 0.15);
+}
+
+.ai-message::before {
+    position: absolute;
+    left: -36px;
+    top: 12px;
+    font-size: 1.2rem;
+    background: #04b698;
+    color: #ffffff;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(4, 182, 152, 0.4);
+}
+
+body.dark-mode .ai-message::before {
+    background: #00796b;
+    color: #e0f2f1;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.ai-message code {
+    background-color: rgba(0, 77, 64, 0.08);
+    color: #004d40;
+    padding: 3px 6px;
+    border-radius: 6px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.95rem;
+    word-break: break-word;
+}
+
+body.dark-mode .ai-message code {
+    background-color: rgba(4, 182, 152, 0.2);
+    color: #b2dfdb;
+}
+
+#chat-history::-webkit-scrollbar {
+    width: 10px;
+}
+#chat-history::-webkit-scrollbar-track {
+    background: transparent;
+}
+#chat-history::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 77, 64, 0.3);
+    border-radius: 10px;
+}
+body.dark-mode #chat-history::-webkit-scrollbar-thumb {
+    background-color: rgba(4, 182, 152, 0.3);
+}
+    
+    </style>
+</head>
+<header>
+  <div class="container1">
+    <a href="{% url 'index' %}" class="logo" tabindex="0">
+      <img src="{% static 'img/newlogo.png' %}" alt="CodeLab Logo" />
+      <span class="brand-text">CODE<span class="blue">LAB</span></span>
+    </a>
+    <nav>
+      <button id="navToggle" class="nav-toggle" aria-label="Navigate menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+      <ul id="navLinks" class="nav-links" role="menu">
+        <li><a href="{% url 'index' %}">Baş sahypa</a></li>
+        {% if user.is_authenticated %}
+          <li>
+            <a href="{% url 'notifications' %}" class="notification-bell" aria-label="Bildirişler">Bildirişler
+              <i class="fas fa-bell"></i>
+              {% if unread_notifications_count > 0 %}
+                <span class="badge">{{ unread_notifications_count }}</span>
+              {% endif %}
+            </a>
+          </li>
+          <li><a href="{% url 'profile_view' username=user.username %}">Profilim</a></li>
+        {% else %}
+            <li><a href="{% url 'register' %}">Registrasiÿa</a></li>
+            <li><a href="{% url 'login' %}">Girmek</a></li>
+        {% endif %}
+        <li><a href="{% url 'question_list' %}">Soraglar</a></li>
+        <li><a href="{% url 'contact' %}">Habarlaşmak</a></li>
+        <li><a href="{% url 'about' %}">Biz barada</a></li>
+        <li><a href="{% url 'daily_rewards' %}">Bonuslar</a></li>
+        <li><a href="{% url 'leaderboard' %}">Reyting</a></li>
+        <li><a href="{% url 'ai' %}">AI</a></li>
+
+      </ul>
+    </nav>
+    <button id="darkModeToggle" aria-label="Toggle dark mode" title="Gijeki/Gündiz režim" style="margin-left: 20px; cursor:pointer; background:none; border:none; color:white; font-size:1.4rem;">🌙</button>
+  </div>
+</header>
+<body>
+    <div id="chat-container">
+        <header id="header">
+            <h1>CodeLab AI</h1>
+        </header>
+        
+        {% csrf_token %}
+
+        <div id="chat-history">
+            <div class="message ai-message">Salam! Men CodeLab AI, programmirleme we kodlama boýunça size kömek ederin. Soragyňyzy ýazyň!</div>
+        </div>
+        <div id="input-area">
+            <input type="text" id="user-input" placeholder="Soragyňyzy ýazyň..." autofocus>
+            <button id="send-button">
+                <span id="send-text">Ugrat</span>
+                <div id="spinner" class="loader" style="display:none;"></div>
+            </button>
+        </div>
+    </div>
+    
+    
+<footer><p>&copy; 2026 CodeLab. Ähli hukuklar goralan.</p></footer>
+
+
+    <script>
+        // NAV TOGGLE
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        navToggle.addEventListener('click', () => {
+          navLinks.classList.toggle('active');
+          navToggle.classList.toggle('active');
+        });
+
+        // Dark Mode 
+        const darkModeToggle = document.getElementById('darkModeToggle');
+
+        function applyTheme(theme) {
+          if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.textContent = '☀️'; 
+            darkModeToggle.setAttribute('aria-pressed', 'true');
+          } else {
+            document.body.classList.remove('dark-mode');
+            darkModeToggle.textContent = '🌙'; 
+            darkModeToggle.setAttribute('aria-pressed', 'false');
+          }
+          localStorage.setItem('theme', theme);
+        }
+
+        function loadTheme() {
+          const savedTheme = localStorage.getItem('theme');
+          if (savedTheme) {
+            applyTheme(savedTheme);
+          } else {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(prefersDark ? 'dark' : 'light');
+          }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+          const isDark = document.body.classList.contains('dark-mode');
+          applyTheme(isDark ? 'light' : 'dark');
+        });
+
+        window.addEventListener('load', loadTheme);
+
+const chatHistory = document.getElementById('chat-history');
+const userInput = document.getElementById('user-input');
+const sendButton = document.getElementById('send-button');
+const spinner = document.getElementById('spinner');
+const sendText = document.getElementById('send-text');
+
+let apiChatHistory = [];
+const API_ENDPOINT = '/api/chat/'; 
+
+
+function getCSRFToken() {
+    const tokenElement = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    return tokenElement ? tokenElement.value : '';
+}
+
+function scrollToBottom() {
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+
+
+function formatMarkdown(text) {
+    let html = text;
+
+    html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+        const languageClass = lang ? `language-${lang.toLowerCase()}` : '';
+        return `<div class="code-container"><pre><code class="${languageClass}">${code.trim()}</code></pre></div>`;
+    });
+
+    html = html.replace(/`([^`]+)`/g, (match, code) => {
+        return `<code>${code}</code>`;
+    });
+    
+    html = html.replace(/\n/g, '<br>');
+
+    return html;
+}
+
+function copyCode(buttonElement) {
+    const codeContainer = buttonElement.closest('.code-container');
+    const codeBlock = codeContainer ? codeContainer.querySelector('code') : null;
+
+    if (codeBlock) {
+        const codeText = codeBlock.textContent;
+
+        navigator.clipboard.writeText(codeText)
+            .then(() => {
+                const originalText = buttonElement.textContent;
+                buttonElement.textContent = 'Göçürildi!';
+                
+                setTimeout(() => {
+                    buttonElement.textContent = originalText;
+                }, 2000);
+            })
+            .catch(err => {
+                console.error('Kody göçürip almakda ýalňyşlyk ýüze çykdy:', err);
+                buttonElement.textContent = 'Ýalňyşlyk!';
+            });
+    }
+}
+
+function attachCopyButtons(aiMessageDiv) {
+    const codeContainers = aiMessageDiv.querySelectorAll('.code-container');
+    
+    codeContainers.forEach(container => {
+        if (container.querySelector('.copy-button')) return; 
+
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-button';
+        copyButton.textContent = 'Kopýala';
+        
+        copyButton.addEventListener('click', () => copyCode(copyButton));
+
+        container.insertBefore(copyButton, container.firstChild);
+    });
+}
+
+
+function addMessage(text, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    
+    let content = text;
+
+    if (sender === 'ai') {
+        content = formatMarkdown(text); 
+        messageDiv.innerHTML = content;
+        
+    } else {
+        messageDiv.textContent = content;
+    }
+
+    chatHistory.appendChild(messageDiv);
+    scrollToBottom();
+    
+    if (sender === 'ai') {
+        attachCopyButtons(messageDiv);
+    }
+}
+
+
+async function sendMessage() {
+    const query = userInput.value.trim();
+    if (!query) return;
+
+    addMessage(query, 'user');
+
+    apiChatHistory.push({ role: 'user', parts: [{ text: query }] });
+    
+    userInput.value = '';
+    sendButton.disabled = true;
+    spinner.style.display = 'block';
+    sendText.style.display = 'none';
+
+    try {
+        const response = await fetch(API_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(), 
+            },
+            body: JSON.stringify({
+                query: query,
+                chat_history: apiChatHistory
+            }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `Serwer Ýalňyşlygy: Status ${response.status}`);
+        }
+
+        const data = await response.json();
+        const aiResponse = data.response || "Jogap alynmady.";
+    
+        addMessage(aiResponse, 'ai'); 
+
+        apiChatHistory.push({ role: 'model', parts: [{ text: aiResponse }] });
+
+    } catch (error) {
+        const errorMessage = `Ýalňyşlyk ýüze çykdy: ${error.message}`;
+        addMessage(errorMessage, 'ai'); 
+        console.error("API Çagyryş Ýalňyşlygy:", error);
+        
+        apiChatHistory.pop(); 
+    } finally {
+        sendButton.disabled = false;
+        spinner.style.display = 'none';
+        sendText.style.display = 'block';
+        userInput.focus();
+    }
+}
+
+sendButton.addEventListener('click', sendMessage);
+userInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !sendButton.disabled) {
+        event.preventDefault(); 
+        sendMessage();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const initialMessage = document.querySelector('.ai-message');
+    if (initialMessage) {
+        const text = initialMessage.textContent;
+        initialMessage.textContent = '';
+        initialMessage.innerHTML = formatMarkdown(text);
+        attachCopyButtons(initialMessage);
+    }
+    userInput.focus();
+});
+    </script>
+</body>
+</html>

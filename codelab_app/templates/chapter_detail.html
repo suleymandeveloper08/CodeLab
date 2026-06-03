@@ -1,0 +1,629 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ chapter.name }}{% endblock %}
+
+{% block style %}
+
+    <link href="[https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css](https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css)" rel="stylesheet" />
+
+    /* RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to right, #e0f2f1, #ffffff);
+      color: #004d40;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* HEADER */
+    body.dark-mode {
+        background: #2a2a2a;
+        color: #a5d6a7;
+      }
+
+      header {
+        background: linear-gradient(90deg, #004d40, #00796b);
+      color: white;
+      padding: 15px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 10px rgba(0, 77, 64, 0.3);
+      transition: background 0.5s, padding 0.3s;
+      }
+      body.dark-mode header {
+        background: linear-gradient(90deg, #00332a, #005d50);
+      }
+
+      .container1 {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.8rem;
+        text-decoration: none;
+        color: white;
+        user-select: none;
+      }
+      .logo img {
+        height: 40px;
+        margin-right: 10px;
+        max-width: 40px;
+        max-height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .brand-text {
+        color: #ffffffff;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+
+      .brand-text .blue {
+        color: #04b698;
+        font-family: sans-serif;
+        font-weight: bold;
+      }
+
+      nav {
+        position: relative;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 25px;
+      }
+      .nav-links li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        color: #b2dfdb;
+        outline: none;
+      }
+      body.dark-mode .nav-links li a {
+        color: #a5d6a7;
+      }
+      body.dark-mode .nav-links li a:hover,
+      body.dark-mode .nav-links li a:focus {
+        color: #81c784;
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 6px;
+        user-select: none;
+        transition: background-color 0.3s ease;
+        z-index: 1100;
+      }
+      .nav-toggle:hover,
+      .nav-toggle:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        outline: none;
+      }
+      .nav-toggle span {
+        height: 3px;
+        width: 28px;
+        background: white;
+        border-radius: 3px;
+        transition: all 0.4s ease;
+        transform-origin: center;
+      }
+      .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+      }
+
+      body.dark-mode .nav-toggle span {
+        background: #a5d6a7;
+      }
+
+      footer {
+        background-color: #263238;
+        color: white;
+        text-align: center;
+        padding: 18px 15px;
+        font-size: 14px;
+        user-select: none;
+        flex-shrink: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        margin-top: auto;
+        transition: background-color 0.3s;
+      }
+      body.dark-mode footer {
+        background-color:  #004d40;
+      }
+
+      @media (max-width: 768px) {
+        .nav-toggle {
+          display: flex;
+        }
+        .nav-links {
+          flex-direction: column;
+          background-color: #004d40;
+          position: fixed;
+          top: 60px;
+          right: 0;
+          width: 75%;
+          max-width: 320px;
+          height: 100vh;
+          padding-top: 30px;
+          box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+          transform: translateX(100%);
+          transition: transform 0.35s ease-in-out;
+          z-index: 1500;
+        }
+        .nav-links.active {
+          transform: translateX(0);
+        }
+        .nav-links li {
+          margin-bottom: 25px;
+          text-align: center;
+        }
+        .nav-links li a {
+          font-size: 1.3rem;
+          color: #b2dfdb;
+          font-weight: 700;
+          transition: color 0.3s ease;
+        }
+        .nav-links li a:hover,
+        .nav-links li a:focus {
+          color: #e0f2f1;
+          outline: none;
+        }
+      }
+    main.main-content { flex-grow: 1; max-width: 900px; margin: 30px auto 60px; padding: 20px 25px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 8px 20px rgba(0, 77, 64, 0.12); border-radius: 12px; color: #004d40; line-height: 1.7; font-size: 1.1rem; font-weight: 400; transition: background 0.3s, color 0.3s; }
+    body.dark-mode main.main-content { background: #2a2a2a; color: white; border: solid 1px #04b698; }
+    main.main-content h1.chapter-title { font-size: 2.4rem; font-weight: 700; margin-bottom: 20px; text-align: center; color: inherit; }
+    main.main-content .chapter-content p, main.main-content .chapter-content ul, main.main-content .chapter-content ol { margin-bottom: 1.2em; }
+    main.main-content .back-link { display: inline-block; margin-top: 25px; margin-right: 15px; padding: 8px 16px; background: #004d40; color: #e0f2f1; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 8px rgba(0, 77, 64, 0.2); transition: background-color 0.3s, color 0.3s; }
+    main.main-content .back-link:hover, main.main-content .back-link:focus { background: #00796b; color: white; outline: none; }
+    body.dark-mode main.main-content .back-link { background: #2a2a2a; color: white; border: solid 1px #04b698; }
+    body.dark-mode main.main-content .back-link:hover, body.dark-mode main.main-content .back-link:focus { background: #a5d6a7; color: #00251a; }
+    .chapter-actions button { padding: 10px 18px; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+    .chapter-actions .mark-complete-btn { background: #00796b; color: white; }
+    .chapter-actions .mark-complete-btn:hover { background: #004d40; transform: translateY(-2px); }
+    .chapter-actions .mark-incomplete-btn { background: #c62828; color: white; }
+    .chapter-actions .mark-incomplete-btn:hover { background: #8e0000; transform: translateY(-2px); }
+    body.dark-mode .chapter-actions .mark-complete-btn { background: #04b698; color: #00251a; }
+    body.dark-mode .chapter-actions .mark-complete-btn:hover { background: #00e5c6; color: #00251a; }
+    body.dark-mode .chapter-actions .mark-incomplete-btn { background: #ef5350; color: #1a1a1a; }
+    body.dark-mode .chapter-actions .mark-incomplete-btn:hover { background: #ff867c; color: #1a1a1a; }
+    .chapter-actions a { display: inline-block; margin-top: 20px; margin-right: 15px; padding: 9px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.95rem; background: #004d40; color: #e0f2f1; box-shadow: 0 4px 8px rgba(0, 77, 64, 0.2); transition: background-color 0.3s, transform 0.3s; }
+    .chapter-actions a:hover { background: #00796b; color: white; transform: translateY(-2px); }
+    body.dark-mode .chapter-actions a { background: #2a2a2a; color: #a5d6a7; border: solid 1px #04b698; }
+    body.dark-mode .chapter-actions a:hover { background: #a5d6a7; color: #00251a; }
+
+    /* ========================================= */
+    /* === NEW TERMINAL STYLES === */
+    /* ========================================= */
+    
+    /* 1. Floating Trigger Button */
+    .terminal-trigger {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #004d40;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        cursor: pointer;
+        z-index: 2000;
+        transition: transform 0.3s, background 0.3s;
+        border: none;
+    }
+    .terminal-trigger:hover {
+        transform: scale(1.1);
+        background: #00796b;
+    }
+    body.dark-mode .terminal-trigger {
+        background: #04b698;
+        color: #00251a;
+    }
+/* === STYLED TERMINAL PANEL === */
+    /* === LIGHT & CLEAN TERMINAL PANEL === */
+    .terminal-panel {
+        position: fixed;
+        top: 0;
+        right: -650px;
+        width: 600px;
+        height: 100vh;
+        background: #ffffff; /* Clean white background */
+        color: #004d40;
+        box-shadow: -5px 0 25px rgba(0, 77, 64, 0.1);
+        z-index: 2001;
+        transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        display: flex;
+        flex-direction: column;
+        border-left: 1px solid #b2dfdb;
+    }
+
+    .terminal-panel.active {
+        right: 0;
+    }
+
+    /* Light Header */
+    .terminal-header {
+        padding: 18px 20px;
+        background: #f0f7f6; /* Very light teal */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #04b698;
+    }
+
+    .terminal-title {
+        font-weight: 700;
+        color: #004d40;
+        font-size: 1.1rem;
+    }
+
+    /* Light Controls */
+    .terminal-controls {
+        padding: 12px 20px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border-bottom: 1px solid #e0f2f1;
+    }
+
+    .lang-select {
+        padding: 8px 12px;
+        background: #f8fdfc;
+        color: #00796b;
+        border: 1px solid #b2dfdb;
+        border-radius: 6px;
+        font-weight: 600;
+        outline: none;
+    }
+
+    /* Editor: White background with dark text */
+    .code-editor {
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        color: #2c3e50;
+        border: none;
+        padding: 20px;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-size: 15px;
+        resize: none;
+        outline: none;
+        line-height: 1.6;
+    }
+
+    /* Output: Soft Mint Green background */
+    .output-console {
+        height: 35%;
+        background: #f1fbf9; 
+        color: #004d40;
+        padding: 20px;
+        font-family: 'Consolas', monospace;
+        font-size: 14px;
+        border-top: 1px solid #b2dfdb;
+        overflow-y: auto;
+    }
+
+    .output-label {
+        color: #04b698;
+        font-weight: bold;
+        font-size: 0.7rem;
+        margin-bottom: 8px;
+        display: block;
+        text-transform: uppercase;
+    }
+
+    .close-terminal {
+        background: none;
+        border: none;
+        font-size: 28px;
+        color: #004d40;
+        cursor: pointer;
+        line-height: 1;
+    }
+
+    /* === LIGHT GREEN RUN BUTTON === */
+    .run-btn {
+        background-color: #04b698; /* Your signature light green */
+        color: #ffffff;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(4, 182, 152, 0.2);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .run-btn:hover {
+        background-color: #039e84; /* Slightly darker on hover */
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(4, 182, 152, 0.3);
+    }
+
+    .run-btn:active {
+        transform: translateY(0);
+    }
+
+    .run-btn:disabled {
+        background-color: #a5d6a7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* === UPDATED FLOATING TRIGGER (LIGHT VERSION) === */
+    .terminal-trigger {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #04b698;
+        color: white;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        box-shadow: 0 8px 20px rgba(0, 77, 64, 0.2);
+        cursor: pointer;
+        z-index: 2000;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid #ffffff;
+    }
+
+    .terminal-trigger:hover {
+        transform: scale(1.1) rotate(10deg);
+        background: #00796b;
+    }
+
+
+    /* Mint Green Icon Style */
+    .icon-mint {
+        fill: #04b698;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    /* Adjusting the header to fit icons */
+    .terminal-header {
+        padding: 15px 20px;
+        background: #f8fdfc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #04b698;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Style for the icon container next to select */
+    .lang-icon-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        background: #e0f2f1;
+        border-radius: 6px;
+    }
+
+{% endblock %}
+
+{% block content %}
+
+<main class="main-content">
+    <h1 class="chapter-title">{{ chapter.title }}</h1>
+    <div class="chapter-content">
+        {{ chapter.content | safe }}
+    </div>
+    <br><br>
+    <div class="chapter-actions">
+        {% if is_completed %}
+            <form method="post" action="{% url 'mark_chapter_complete' category_slug=chapter.category.slug chapter_slug=chapter.slug %}">
+                {% csrf_token %}
+                <p>Bolum tamamlandy</p>
+                <button type="submit" class="mark-incomplete-btn">Yza almak</button>
+            </form>
+        {% else %}
+            <form method="post" action="{% url 'mark_chapter_complete' category_slug=chapter.category.slug chapter_slug=chapter.slug %}">
+                {% csrf_token %}
+                <button type="submit" class="mark-complete-btn">Bölümi tamamla</button>
+            </form>
+        {% endif %}
+        {% if learningplan %}
+          <a href="{% url 'view_learning_plan' category.slug %}">Plana dolan</a>
+        {% else %}
+          <a href="{% url 'category_detail' category.slug %}">Bolume dolan</a>
+        {% endif %}
+    </div>
+
+
+</main>
+
+<button class="terminal-trigger" onclick="toggleTerminal()" title="Open Practice Terminal">
+    <span>&lt;/&gt;</span>
+</button>
+
+<div class="terminal-panel" id="terminalPanel">
+    <div class="terminal-header">
+        <span class="terminal-title">Terminal</span>
+        <button class="close-terminal" onclick="toggleTerminal()">&times;</button>
+    </div>
+    
+    <div class="terminal-controls">
+        <select id="languageSelect" class="lang-select">
+            <option value="python">Python 3</option>
+            <option value="javascript">JavaScript</option>
+            <option disabled title="Beyleki diller hem yakynda upjun bolar! ">Beylekiler (Yakynda geler!)</option>
+        </select>
+
+        <button class="run-btn" id="runBtn" onclick="runCode()">
+            <span>►</span> Kody islet
+        </button>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; background: #fff;">
+        <textarea id="codeEditor" class="code-editor" spellcheck="false" 
+            placeholder="Write your code here..."># Terminala hos geldiniz.&#10;# Häzirlikçe Python we JavaScript dillerini ulanyp bilersiniz.&#10;# Beyleki diller hem yakynda upjun bolar! &#10;print("CodeLab platformasyny halayaryn! ")</textarea>
+    </div>
+
+    <div class="output-console" id="outputConsole">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span class="output-label">Netije/Konsol </span>
+            <span onclick="document.getElementById('outputText').innerText = 'Konsol arassalandy.'" 
+                  style="cursor:pointer; font-size: 10px; color: #999; text-transform: uppercase;">Arassala</span>
+        </div>
+        <div id="outputText" style="white-space: pre-wrap;">Isletmage tayyar...</div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+
+<script>
+    let pyodideInstance = null;
+    let isPyodideLoading = false;
+
+    
+    function toggleTerminal() {
+        const panel = document.getElementById('terminalPanel');
+        if (!panel) return;
+        panel.classList.toggle('active');
+        
+        
+        if (!pyodideInstance && !isPyodideLoading) {
+            initPython();
+        }
+    }
+
+    
+    async function initPython() {
+        if (pyodideInstance || isPyodideLoading) return;
+        
+        isPyodideLoading = true;
+        const outputDiv = document.getElementById('outputText');
+        outputDiv.innerHTML = '<span style="color: #ff9800;">[System]: Python sizin browzerinize gurnalyar...</span>';
+
+        try {
+            pyodideInstance = await loadPyodide();
+            outputDiv.innerHTML = '<span style="color: #4caf50;">[System]: Python tayyar!</span>';
+        } catch (err) {
+            outputDiv.innerHTML = '<span style="color: #f44336;">[Error]: Gurnalmady. Internedinizi barlan...</span>';
+            console.error(err);
+        } finally {
+            isPyodideLoading = false;
+        }
+    }
+
+    // 3. Execution Function
+    async function runCode() {
+    const runBtn = document.getElementById('runBtn');
+    const code = document.getElementById('codeEditor').value;
+    const language = document.getElementById('languageSelect').value;
+    const outputDiv = document.getElementById('outputText');
+
+    
+    if (language === "" || language.includes("Others")) {
+        outputDiv.innerText = "Please select a supported language (Python or JS).";
+        return;
+    }
+
+    runBtn.disabled = true;
+    runBtn.innerHTML = "Running...";
+    outputDiv.style.color = "#004d40";
+
+    try {
+        if (language === 'python') {
+            if (!pyodideInstance) {
+                outputDiv.innerText = "Engine loading... please try again in 3 seconds.";
+                await initPython();
+                return;
+            }
+            await pyodideInstance.runPythonAsync(`
+import sys, io
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+            `);
+            try {
+                await pyodideInstance.runPythonAsync(code);
+                const out = pyodideInstance.runPython("sys.stdout.getvalue()");
+                const err = pyodideInstance.runPython("sys.stderr.getvalue()");
+                outputDiv.innerText = out + (err ? "\nError: " + err : "");
+            } catch (e) {
+                outputDiv.innerText = "Python Error: " + e;
+            }
+        } else if (language === 'javascript') {
+            let logs = [];
+            const oldLog = console.log;
+            console.log = (...args) => logs.push(args.join(" "));
+            try {
+                eval(code);
+                outputDiv.innerText = logs.join("\n") || "Done (no output).";
+            } catch (e) {
+                outputDiv.innerText = "JS Error: " + e;
+            }
+            console.log = oldLog;
+        }
+    } catch (err) {
+        outputDiv.innerText = "Fatal Error: " + err;
+    } finally {
+        runBtn.disabled = false;
+        runBtn.innerHTML = "► Kody islet";
+    }
+}
+</script>
+
+<script src="[https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js](https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js)"></script>
+<script src="[https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js](https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js)"></script>
+<script src="[https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js](https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js)"></script>
+
+{% endblock %}

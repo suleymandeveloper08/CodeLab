@@ -1,0 +1,296 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Final Synag Netijesi{% endblock %}
+
+{% block style %}
+    /* RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to right, #e0f2f1, #ffffff);
+      color: #004d40;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* HEADER */
+    body.dark-mode {
+        background: #2a2a2a;
+        color: #a5d6a7;
+      }
+
+      header {
+        background: linear-gradient(90deg, #004d40, #00796b);
+        color: white;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 77, 64, 0.3);
+        transition: background 0.3s;
+      }
+      body.dark-mode header {
+        background: linear-gradient(90deg, #00332a, #005d50);
+      }
+
+      .container1 {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.8rem;
+        text-decoration: none;
+        color: white;
+        user-select: none;
+      }
+      .logo img {
+        height: 40px;
+        margin-right: 10px;
+        max-width: 40px;
+        max-height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .brand-text {
+        color: #ffffffff;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+
+      .brand-text .blue {
+        color: #04b698;
+        font-family: sans-serif;
+        font-weight: bold;
+      }
+
+      nav {
+        position: relative;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 25px;
+      }
+      .nav-links li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        color: #b2dfdb;
+        outline: none;
+      }
+      body.dark-mode .nav-links li a {
+        color: #a5d6a7;
+      }
+      body.dark-mode .nav-links li a:hover,
+      body.dark-mode .nav-links li a:focus {
+        color: #81c784;
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 6px;
+        user-select: none;
+        transition: background-color 0.3s ease;
+        z-index: 1100;
+      }
+      .nav-toggle:hover,
+      .nav-toggle:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        outline: none;
+      }
+      .nav-toggle span {
+        height: 3px;
+        width: 28px;
+        background: white;
+        border-radius: 3px;
+        transition: all 0.4s ease;
+        transform-origin: center;
+      }
+      .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+      }
+
+      body.dark-mode .nav-toggle span {
+        background: #a5d6a7;
+      }
+
+      footer {
+        background-color: #263238;
+        color: white;
+        text-align: center;
+        padding: 18px 15px;
+        font-size: 14px;
+        user-select: none;
+        flex-shrink: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        margin-top: auto;
+        transition: background-color 0.3s;
+      }
+      body.dark-mode footer {
+        background-color:  #004d40;
+      }
+
+      @media (max-width: 768px) {
+        .nav-toggle {
+          display: flex;
+        }
+        .nav-links {
+          flex-direction: column;
+          background-color: #004d40;
+          position: fixed;
+          top: 60px;
+          right: 0;
+          width: 75%;
+          max-width: 320px;
+          height: 100vh;
+          padding-top: 30px;
+          box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+          transform: translateX(100%);
+          transition: transform 0.35s ease-in-out;
+          z-index: 1500;
+        }
+        .nav-links.active {
+          transform: translateX(0);
+        }
+        .nav-links li {
+          margin-bottom: 25px;
+          text-align: center;
+        }
+        .nav-links li a {
+          font-size: 1.3rem;
+          color: #b2dfdb;
+          font-weight: 700;
+          transition: color 0.3s ease;
+        }
+        .nav-links li a:hover,
+        .nav-links li a:focus {
+          color: #e0f2f1;
+          outline: none;
+        }
+      }
+    /* Add necessary styles for a results page, similar to quiz_results.html */
+    .results-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    h1 {
+        color: #004d40;
+        margin-bottom: 20px;
+        font-size: 2.5em;
+    }
+    .score-card {
+        background: #e0f2f1;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+    }
+    .score-card p {
+        font-size: 1.2em;
+        margin: 10px 0;
+        color: #00796b;
+    }
+    .score-percentage {
+        font-size: 3em;
+        font-weight: bold;
+        color: {% if percentage >= 70 %}#4caf50{% else %}#f44336{% endif %};
+        margin-top: 15px;
+    }
+    .plan-status-message {
+        font-size: 1.5em;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-weight: 500;
+    }
+    .success {
+        background: #c8e6c9;
+        color: #2e7d32;
+        border: 1px solid #4caf50;
+    }
+    .failure {
+        background: #ffcdd2;
+        color: #c62828;
+        border: 1px solid #f44336;
+    }
+    .back-btn {
+        display: inline-block;
+        padding: 12px 25px;
+        background-color: #00796b;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: background-color 0.3s;
+    }
+    .back-btn:hover {
+        background-color: #004d40;
+    }
+{% endblock %}
+
+
+{% block content %}
+    <main class="results-container">
+        <h1>Ahyrky Synag Netijesi</h1>
+        
+        <div class="score-card">
+            <p>Dogry Jogaplar: {{ total_score }} / {{ total_questions }}</p>
+            <div class="score-percentage">{{ percentage }}%</div>
+        </div>
+
+        {% if plan_completed %}
+            <div class="plan-status-message success">
+                Tüweleme! Synagdan **70% ýa-da ýokary** bal aldyňyz.
+                <br>
+                **{{ learning_plan.category.name }}** boýunça Okuw Meýilnamasy **tamamlandy** diýlip bellendi!
+            </div>
+        {% else %}
+            <div class="plan-status-message failure">
+                Synagy tamamlamak üçin **70%** bal gerek.
+                <br>
+                Häzirki Meýilnama **tamamlanmady**. Gaýtadan synanyşyň ýa-da gözden geçiriň.
+            </div>
+        {% endif %}
+
+        <a href="{% url 'view_learning_plan' category_slug=category.slug %}" class="back-btn">
+            Okuw Meýilnamasyna dolan
+        </a>
+        {% if plan_completed %}
+         <a href="{% url 'certificate_form_view' category_slug=category.slug %}" class="back-btn">
+            Sertifikat al
+        </a>
+        {% endif %}
+    </main>
+{% endblock %}

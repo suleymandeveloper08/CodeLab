@@ -1,0 +1,510 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ user.name }} profili{% endblock %}
+
+{% block style %}
+    /* RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to right, #e0f2f1, #ffffff);
+      color: #004d40;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* HEADER */
+    body.dark-mode {
+        background: #2a2a2a;
+        color: #a5d6a7;
+      }
+
+      header {
+        background: linear-gradient(90deg, #004d40, #00796b);
+        color: white;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 77, 64, 0.3);
+        transition: background 0.3s;
+      }
+      body.dark-mode header {
+        background: linear-gradient(90deg, #00332a, #005d50);
+      }
+
+      .container1 {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.8rem;
+        text-decoration: none;
+        color: white;
+        user-select: none;
+      }
+      .logo img {
+        height: 40px;
+        margin-right: 10px;
+        max-width: 40px;
+        max-height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .brand-text {
+        color: #ffffffff;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+
+      .brand-text .blue {
+        color: #04b698;
+        font-family: sans-serif;
+        font-weight: bold;
+      }
+
+      nav {
+        position: relative;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 25px;
+      }
+      .nav-links li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        color: #b2dfdb;
+        outline: none;
+      }
+      body.dark-mode .nav-links li a {
+        color: #a5d6a7;
+      }
+      body.dark-mode .nav-links li a:hover,
+      body.dark-mode .nav-links li a:focus {
+        color: #81c784;
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 6px;
+        user-select: none;
+        transition: background-color 0.3s ease;
+        z-index: 1100;
+      }
+      .nav-toggle:hover,
+      .nav-toggle:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        outline: none;
+      }
+      .nav-toggle span {
+        height: 3px;
+        width: 28px;
+        background: white;
+        border-radius: 3px;
+        transition: all 0.4s ease;
+        transform-origin: center;
+      }
+      .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+      }
+
+      body.dark-mode .nav-toggle span {
+        background: #a5d6a7;
+      }
+
+      footer {
+        background-color: #263238;
+        color: white;
+        text-align: center;
+        padding: 18px 15px;
+        font-size: 14px;
+        user-select: none;
+        flex-shrink: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        margin-top: auto;
+        transition: background-color 0.3s;
+      }
+      body.dark-mode footer {
+        background-color:  #004d40;
+      }
+
+      @media (max-width: 768px) {
+        .nav-toggle {
+          display: flex;
+        }
+        .nav-links {
+          flex-direction: column;
+          background-color: #004d40;
+          position: fixed;
+          top: 60px;
+          right: 0;
+          width: 75%;
+          max-width: 320px;
+          height: 100vh;
+          padding-top: 30px;
+          box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+          transform: translateX(100%);
+          transition: transform 0.35s ease-in-out;
+          z-index: 1500;
+        }
+        .nav-links.active {
+          transform: translateX(0);
+        }
+        .nav-links li {
+          margin-bottom: 25px;
+          text-align: center;
+        }
+        .nav-links li a {
+          font-size: 1.3rem;
+          color: #b2dfdb;
+          font-weight: 700;
+          transition: color 0.3s ease;
+        }
+        .nav-links li a:hover,
+        .nav-links li a:focus {
+          color: #e0f2f1;
+          outline: none;
+        }
+      }
+      /* MAIN */
+main {
+  flex-grow: 1;
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+/* Profile Section */
+.profile-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+.profile-card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+body.dark-mode .profile-card {
+  background: #2a2a2a;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  border: solid #04b698;
+  color: white;
+}
+
+.profile-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #00796b;
+}
+.profile-info {
+  flex: 1;
+}
+.profile-username {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+.profile-bio {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: #555;
+}
+body.dark-mode .profile-bio {
+  color: white;
+}
+.edit-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  background: #00796b;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+body.dark-mode .edit-btn {
+  background: #2a2a2a;
+  color: white;
+  border: solid #04b698;
+}
+.edit-btn:hover {
+  background: #004d40;
+}
+
+/* Learning Plans Section */
+.learning-plans-section {
+  margin-bottom: 40px;
+}
+.section-title {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+}
+.plans-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.plan-card {
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s, background 0.3s;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+}
+body.dark-mode .plan-card {
+  background: #2a2a2a;
+  background: #2a2a2a;
+  border: solid #04b698;
+}
+.plan-category-name {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+.plan-status {
+  margin-bottom: 15px;
+}
+.completed {
+  color: #2e7d32;
+  font-weight: bold;
+}
+.ongoing {
+  color: #ef6c00;
+  font-weight: bold;
+}
+.view-plan-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  background: #00796b;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+body.dark-mode .view-plan-btn {
+  background: #2a2a2a;
+  color: white;
+  border: solid #04b698;
+}
+.view-plan-btn:hover {
+  background: #004d40;
+}
+.no-plans {
+  font-size: 1rem;
+}
+.create-plan-link {
+  color: #00796b;
+  font-weight: bold;
+  text-decoration: none;
+}
+.create-plan-link:hover {
+  text-decoration: underline;
+}
+/* LOGOUT BUTTON */
+.logout-btn {
+  display: inline-block;
+  padding: 10px 18px;
+  background: #f44336;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+  margin-top: 12px;
+}
+
+body.dark-mode .logout-btn {
+  background: #2a2a2a;
+  border: solid #ff5252;
+  color: #fff;
+}
+/* QUESTIONS bölümi */
+#questionss {
+  font-size: 1.8rem;
+  margin: 50px 0 25px;
+  text-align: center;
+  color: #004d40;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+#questionss::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #00796b, #04b698);
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+body.dark-mode #questionss {
+  color: #a5d6a7;
+}
+body.dark-mode #questionss::after {
+  background: linear-gradient(90deg, #04b698, #26a69a);
+}
+
+/* Soraglaryň sanawy */
+.questions-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+/* Her bir sorag kartasy */
+.question-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.question-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(4, 182, 152, 0.3);
+}
+
+/* DARK MODE üçin */
+body.dark-mode .question-card {
+  background: #2a2a2a;
+  color: #e0f2f1;
+  border: solid #04b698;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+}
+body.dark-mode .question-card:hover {
+  box-shadow: 0 8px 22px rgba(4, 182, 152, 0.5);
+}
+
+/* Sorag ady */
+.question-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #004d40;
+  line-height: 1.4;
+}
+body.dark-mode .question-title {
+  color: #a5d6a7;
+}
+
+/* Eger wagt ýa-da goşmaça info görkezmek isleseň */
+.question-meta {
+  font-size: 0.9rem;
+  color: #555;
+}
+body.dark-mode .question-meta {
+  color: #bdbdbd;
+}
+
+{% endblock %}
+
+{% block content %}
+
+  <main>
+  <section class="profile-section">
+    <div class="profile-card">
+      <img 
+        src="{% if profile_user.profile.profile_picture %}{{ profile_user.profile.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
+        alt="Profile Picture" 
+        onerror="this.onerror=null;this.src='{% static 'images/default-profile.png' %}';"
+        class="profile-img"
+      />
+      <div class="profile-info">
+        <h2 class="profile-username">{{ profile_user.username }}</h2>
+        <p class="profile-bio">{{ profile_user.profile.bio|default:"" }}</p>
+        <p class="profile-bio">XP: {{ profile_user.profile.xp }}</p>
+        {% if request.user.username == profile_user.username %}
+          <a href="{% url 'edit_profile' username=profile_user.username %}" class="edit-btn">Profili üýtget</a>
+        {% endif %}
+        <a href="{% url 'logout_done' %}" class="logout-btn">Çykmak</a>
+      </div>
+      <section class="learning-plans-section">
+        <h2 class="section-title">Siziň Okuw Meýilnamalaryňyz</h2>
+        {% if learning_plans %}
+          <div class="plans-list">
+            {% for plan in learning_plans %}
+              <div class="plan-card">
+                <h3 class="plan-category-name">{{ plan.category.name }}</h3>
+                <p class="plan-status">
+                  {% if plan.is_completed == True %}
+                    <span class="completed">Tamamlanan</span>
+                  {% else %}
+                    <span class="ongoing">Dowam edyan</span>
+                  {% endif %}
+                </p>
+                <a href="{% url 'view_learning_plan' category_slug=plan.category.slug %}" class="view-plan-btn">Meýilnamany gör</a>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="no-plans">Häzirlikçe hiç hili okuw meýilnamasy ýok. <a href="{% url 'index' %}" class="create-plan-link">Täze döret</a>.</p>
+        {% endif %}
+      </section>
+    </div>
+  </section>
+ <h1 id="questionss">Siziň beren soraglaryňyz</h1>
+<div class="questions-container">
+  {% for question in questions %}
+    <div class="question-card">
+      <a href="{% url 'question_detail' slug=question.slug %}"><h3 class="question-title">{{ question.title }}</h3></a>
+      <p class="question-meta">{{ question.created_at|date:"d.m.Y H:i" }}</p>
+    </div>
+  {% endfor %}
+</div>
+
+</main>
+  
+{% endblock %}

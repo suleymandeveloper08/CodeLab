@@ -1,0 +1,11 @@
+Esasy Django Web Serweri
+
+Django==5.0
+
+Google Generative AI Kitaphanasy (Söhbetdeşlik API üçin)
+
+google-genai
+
+Gunicorn - Django proýektini serwerde (PythonAnywhere ýaly) işledýän web serwer interfeýsi
+
+gunicorn

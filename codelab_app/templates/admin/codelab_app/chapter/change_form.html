@@ -1,0 +1,15 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<!-- Load CKEditor from local static files -->
+<script src="{% static 'ckeditor/ckeditor.js' %}"></script>
+<script>
+    // Use window.onload to ensure all elements are loaded before initializing the editor
+    window.onload = function() {
+        // Find the textarea with the 'tinymce-editor' class and replace it with CKEditor
+        CKEDITOR.replace('id_content');
+    };
+</script>
+{% endblock %}

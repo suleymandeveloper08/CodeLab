@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} | CodeLab</title>
+    <style>
+        /* *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(to right, #e0f2f1, #ffffff);
+            color: #004d40;
+            transition: background 0.4s;
+            overflow-x: hidden;
+        }
+
+        body.dark-mode { background: #121212; color: #e0f2f1; }
+
+        header {
+            background: linear-gradient(90deg, #004d40, #00796b);
+            color: white;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        body.dark-mode header { background: linear-gradient(90deg, #002d25, #004d40); }
+
+        .container1 {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo { display: flex; align-items: center; text-decoration: none; z-index: 1100; }
+        .logo img { height: 40px; width: 40px; border-radius: 50%; margin-right: 10px; }
+        .brand-text { color: white; font-weight: bold; font-size: 22px; }
+        .brand-text .blue { color: #04b698; }
+
+        .nav-links { list-style: none; display: flex; gap: 20px; align-items: center; }
+        .nav-links li a { color: white; text-decoration: none; font-weight: 600; transition: 0.3s; }
+        .nav-links li a:hover { color: #b2dfdb; }
+        body.dark-mode .nav-links li a { color: #a5d6a7; }
+
+        .nav-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1600; }
+        .nav-toggle span { display: block; width: 25px; height: 3px; border-radius: 3px; transition: 0.3s; }
+
+        @media (max-width: 992px) {
+            .nav-toggle { display: flex; }
+            .nav-links {
+                position: fixed; top: 0; right: 0; height: 100vh; width: 70%; max-width: 300px;
+                background: #004d40; flex-direction: column; justify-content: center;
+                transform: translateX(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+            }
+            .nav-links.active { transform: translateX(0); }
+            .nav-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .nav-toggle.active span:nth-child(2) { opacity: 0; }
+            .nav-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        }
+
+        footer { background: #263238; color: white; text-align: center; padding: 20px; margin-top: auto; }
+        body.dark-mode footer { background: #00332a; } */
+
+        {% block style %}{% endblock %}
+    </style>
+</head>
+<body>
+
+<header>
+  <div class="container1">
+    <a href="{% url 'index' %}" class="logo" tabindex="0">
+      <img src="{% static 'img/newlogo.png' %}" alt="CodeLab Logo" />
+      <span class="brand-text">CODE<span class="blue">LAB</span></span>
+    </a>
+    <nav>
+      <button id="navToggle" class="nav-toggle" aria-label="Navigate menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+      <ul id="navLinks" class="nav-links" role="menu">
+        <li><a href="{% url 'index' %}">Baş sahypa</a></li>
+        {% if user.is_authenticated %}
+          <li>
+            <a href="{% url 'notifications' %}" class="notification-bell" aria-label="Bildirişler">Bildirişler
+              <i class="fas fa-bell"></i>
+              {% if unread_notifications_count > 0 %}
+                <span class="badge">{{ unread_notifications_count }}</span>
+              {% endif %}
+            </a>
+          </li>
+          <li><a href="{% url 'profile_view' username=user.username %}">Profilim</a></li>
+        {% else %}
+            <li><a href="{% url 'register' %}">Registrasiÿa</a></li>
+            <li><a href="{% url 'login' %}">Girmek</a></li>
+        {% endif %}
+        <li><a href="{% url 'question_list' %}">Soraglar</a></li>
+        <li><a href="{% url 'contact' %}">Habarlaşmak</a></li>
+        <li><a href="{% url 'about' %}">Biz barada</a></li>
+        <li><a href="{% url 'daily_rewards' %}">Bonuslar</a></li>
+        <li><a href="{% url 'leaderboard' %}">Reyting</a></li>
+        <li><a href="{% url 'ai' %}">AI</a></li>
+
+      </ul>
+    </nav>
+    <button id="darkModeToggle" aria-label="Toggle dark mode" title="Gijeki/Gündiz režim" style="margin-left: 20px; cursor:pointer; background:none; border:none; color:white; font-size:1.4rem;">🌙</button>
+  </div>
+</header>
+
+{% block content %}{% endblock %}
+
+<footer>
+  <p>&copy; 2026 CodeLab. Ähli hukuklar goralan.</p>
+</footer>
+
+<script>
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+
+    navToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navLinks.classList.toggle('active');
+        navToggle.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+            navLinks.classList.remove('active');
+            navToggle.classList.remove('active');
+        }
+    });
+
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.textContent = '☀️';
+        } else {
+            document.body.classList.remove('dark-mode');
+            darkModeToggle.textContent = '🌙';
+        }
+        localStorage.setItem('theme', theme);
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+        const isDark = document.body.classList.contains('dark-mode');
+        applyTheme(isDark ? 'light' : 'dark');
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+    });
+</script>
+</body>
+</html>

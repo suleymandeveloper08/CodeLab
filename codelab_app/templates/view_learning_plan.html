@@ -1,0 +1,492 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Okuw meyilnamasy{% endblock %}
+
+{% block style %}
+    /* RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to right, #e0f2f1, #ffffff);
+      color: #004d40;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* HEADER */
+    body.dark-mode {
+        background: #2a2a2a;
+        color: #a5d6a7;
+      }
+
+      header {
+        background: linear-gradient(90deg, #004d40, #00796b);
+        color: white;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 77, 64, 0.3);
+        transition: background 0.3s;
+      }
+      body.dark-mode header {
+        background: linear-gradient(90deg, #00332a, #005d50);
+      }
+
+      .container1 {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.8rem;
+        text-decoration: none;
+        color: white;
+        user-select: none;
+      }
+      .logo img {
+        height: 40px;
+        margin-right: 10px;
+        max-width: 40px;
+        max-height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .brand-text {
+        color: #ffffffff;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+
+      .brand-text .blue {
+        color: #04b698;
+        font-family: sans-serif;
+        font-weight: bold;
+      }
+
+      nav {
+        position: relative;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 25px;
+      }
+      .nav-links li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        color: #b2dfdb;
+        outline: none;
+      }
+      body.dark-mode .nav-links li a {
+        color: #a5d6a7;
+      }
+      body.dark-mode .nav-links li a:hover,
+      body.dark-mode .nav-links li a:focus {
+        color: #81c784;
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 6px;
+        user-select: none;
+        transition: background-color 0.3s ease;
+        z-index: 1100;
+      }
+      .nav-toggle:hover,
+      .nav-toggle:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        outline: none;
+      }
+      .nav-toggle span {
+        height: 3px;
+        width: 28px;
+        background: white;
+        border-radius: 3px;
+        transition: all 0.4s ease;
+        transform-origin: center;
+      }
+      .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+      }
+
+      body.dark-mode .nav-toggle span {
+        background: #a5d6a7;
+      }
+
+      footer {
+        background-color: #263238;
+        color: white;
+        text-align: center;
+        padding: 18px 15px;
+        font-size: 14px;
+        user-select: none;
+        flex-shrink: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        margin-top: auto;
+        transition: background-color 0.3s;
+      }
+      body.dark-mode footer {
+        background-color:  #004d40;
+      }
+
+      @media (max-width: 768px) {
+        .nav-toggle {
+          display: flex;
+        }
+        .nav-links {
+          flex-direction: column;
+          background-color: #004d40;
+          position: fixed;
+          top: 60px;
+          right: 0;
+          width: 75%;
+          max-width: 320px;
+          height: 100vh;
+          padding-top: 30px;
+          box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+          transform: translateX(100%);
+          transition: transform 0.35s ease-in-out;
+          z-index: 1500;
+        }
+        .nav-links.active {
+          transform: translateX(0);
+        }
+        .nav-links li {
+          margin-bottom: 25px;
+          text-align: center;
+        }
+        .nav-links li a {
+          font-size: 1.3rem;
+          color: #b2dfdb;
+          font-weight: 700;
+          transition: color 0.3s ease;
+        }
+        .nav-links li a:hover,
+        .nav-links li a:focus {
+          color: #e0f2f1;
+          outline: none;
+        }
+      }
+      .main-content {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 25px 20px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        line-height: 1.6;
+        animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Dark mode üçin */
+        body.dark-mode .main-content {
+        background-color: #2a2a2a;
+        color: white;
+        border: solid #04b698;
+        }
+
+        /* Başlyklar */
+        .main-content h1 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        color: #004d40;
+        }
+        body.dark-mode .main-content h1 {
+        color: white;
+        }
+
+        .main-content p {
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+        }
+
+        /* Günleriň esasy konteýneri */
+.days-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 25px;
+  margin-top: 25px;
+  padding: 15px;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* DARK MODE */
+body.dark-mode .days-container {
+  background: rgba(42, 42, 42, 0.85);
+  box-shadow: 0 4px 16px rgba(4, 182, 152, 0.3);
+  border: 1px solid rgba(4, 182, 152, 0.4);
+}
+
+/* Her günüň bölümi */
+.day-section {
+  background: linear-gradient(145deg, #e0f2f1, #ffffff);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+.day-section:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(4, 182, 152, 0.25);
+}
+
+/* DARK MODE */
+body.dark-mode .day-section {
+  background: #2a2a2a;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(4, 182, 152, 0.4);
+}
+
+/* Günleriň başlygy */
+.day-section h3 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: #00695c;
+  border-bottom: 2px solid #04b698;
+  padding-bottom: 6px;
+}
+body.dark-mode .day-section h3 {
+  color: #a5d6a7;
+  border-color: #04b698;
+}
+
+/* Bölümleriň sanawy */
+.chapter-list {
+  list-style: none;
+  margin-top: 12px;
+  padding-left: 0;
+}
+.chapter-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: rgba(4, 182, 152, 0.08);
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+.chapter-item:hover {
+  background: rgba(4, 182, 152, 0.18);
+}
+
+/* DARK MODE */
+body.dark-mode .chapter-item {
+  background: rgba(255, 255, 255, 0.07);
+}
+body.dark-mode .chapter-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Linkleriň stili */
+.chapter-item a {
+  text-decoration: none;
+  color: #004d40;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+.chapter-item a:hover {
+  color: #00796b;
+}
+body.dark-mode .chapter-item a {
+  color: #e0f2f1;
+}
+body.dark-mode .chapter-item a:hover {
+  color: #04b698;
+}
+
+
+.completed-sign,
+.pending-sign {
+  font-size: 1.1rem;
+  margin-left: 10px;
+  user-select: none;
+  transition: transform 0.3s ease;
+}
+.completed-sign:hover,
+.pending-sign:hover {
+  transform: scale(1.3);
+}
+
+/* Täze animasiýa effekti */
+@keyframes glowIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.day-section {
+  animation: glowIn 0.5s ease-in-out;
+}
+
+
+        .day-card {
+        background-color: #e0f2f1;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s;
+        }
+        .day-card:hover {
+        transform: translateY(-3px);
+        }
+        body.dark-mode .day-card {
+        background-color: #004d40;
+        }
+
+        /* Action linkler */
+        .action-links {
+        margin-top: 30px;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        }
+
+        .action-link {
+        padding: 10px 18px;
+        background-color: #004d40;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: background-color 0.3s;
+        }
+        .action-link:hover {
+        background-color: #00796b;
+        }
+        body.dark-mode .action-link {
+        background-color: #2a2a2a;
+        color: white;
+        border: solid #04b698
+        }
+        body.dark-mode .action-link:hover {
+        background-color: #26a69a;
+        }
+
+        /* Animasiýa */
+        @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+        }
+        /* Finish and Take Quiz Button */
+.final-quiz-btn {
+    padding: 12px 25px;
+    background: #004d40;  /* Primary color */
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.final-quiz-btn:hover {
+    background: #00796b;  /* Lighter shade on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.final-quiz-btn:active {
+    background: #003d33;  /* Darker shade on click */
+    transform: translateY(2px);  /* Button presses down */
+}
+
+.final-quiz-btn:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(4, 182, 152, 0.6); /* Focus glow effect */
+}
+
+
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="main-content">
+        <h1>{{ category.name }} Okuw meýilnamasy</h1>
+        <p>Aşakda siz üçin döredilen okuw meýilnamasy görkezilen.</p>
+        
+        <div class="days-container">
+            {% for day_key, chapters_list in daily_chapters.items %}
+              <div class="day-section">
+                  <h3>{{ day_key }}</h3>
+                  <ul class="chapter-list">
+                      {% for chapter_data in chapters_list %}
+                      <li class="chapter-item">
+                          <a href="{% url 'chapter_detail' category_slug=category.slug chapter_slug=chapter_data.slug %}">
+                              {{ chapter_data.title }}
+                          </a>
+                          
+                          {% if chapter_data.is_completed %}
+                              <span class="completed-sign" title="Tamamlandy">✅</span>
+                          {% else %}
+                              <span class="pending-sign" title="Gözden geçirmeli">⏳</span>
+                          {% endif %}
+                          </li>
+                      {% endfor %}
+                  </ul>
+              </div>
+          {% endfor %}
+
+          {% if not learning_plan.is_completed %}
+              {% if all_plan_chapters_completed %}
+                  <div class="final-quiz-section">
+                      <p>Bütin plan boýunça ähli bölümler tamamlandy. Ahyrky synagy çözmäge taýyn:</p>
+                      <a href="{% url 'complete_learning_plan_quiz' category_slug=category.slug %}" class="btn-primary final-quiz-btn">
+                          Finish and Take a Quiz
+                      </a>
+                  </div>
+              {% else %}
+                  <div class="status-message">
+                      <p>Plan boýunça synag çözmek üçin ähli bölümleri tamamlaň.</p>
+                  </div>
+              {% endif %}
+          {% else %}
+              <div class="status-message completed-plan">
+                  <p>🎉 Bu Okuw Meýilnamasy üstünlikli tamamlandy! (Netije: {{ learning_plan.quiz_score|default:'--' }}%)</p>
+              </div>
+          {% endif %}
+        </div>
+        
+        <div class="action-links">
+            <a href="{% url 'create_learning_plan' category_slug=category.slug %}" class="action-link">Meýilnamany üýtget</a>
+            <a href="{% url 'delete_learning_plan' plan_id=learning_plan.id %}" class="action-link" onclick="return confirm('Bu okuw meýilnamasyny pozmak isleýärsiňizmi?');">Meýilnamany poz</a>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

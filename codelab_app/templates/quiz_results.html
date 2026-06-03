@@ -1,0 +1,456 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Quiz Netijeleri{% endblock %}
+
+{% block style %}
+    /* RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to right, #e0f2f1, #ffffff);
+      color: #004d40;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* HEADER */
+    body.dark-mode {
+        background: #2a2a2a;
+        color: #a5d6a7;
+      }
+
+      header {
+        background: linear-gradient(90deg, #004d40, #00796b);
+        color: white;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 77, 64, 0.3);
+        transition: background 0.3s;
+      }
+      body.dark-mode header {
+        background: linear-gradient(90deg, #00332a, #005d50);
+      }
+
+      .container1 {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.8rem;
+        text-decoration: none;
+        color: white;
+        user-select: none;
+      }
+      .logo img {
+        height: 40px;
+        margin-right: 10px;
+        max-width: 40px;
+        max-height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .brand-text {
+        color: #ffffffff;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+
+      .brand-text .blue {
+        color: #04b698;
+        font-family: sans-serif;
+        font-weight: bold;
+      }
+
+      nav {
+        position: relative;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 25px;
+      }
+      .nav-links li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        color: #b2dfdb;
+        outline: none;
+      }
+      body.dark-mode .nav-links li a {
+        color: #a5d6a7;
+      }
+      body.dark-mode .nav-links li a:hover,
+      body.dark-mode .nav-links li a:focus {
+        color: #81c784;
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 6px;
+        user-select: none;
+        transition: background-color 0.3s ease;
+        z-index: 1100;
+      }
+      .nav-toggle:hover,
+      .nav-toggle:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        outline: none;
+      }
+      .nav-toggle span {
+        height: 3px;
+        width: 28px;
+        background: white;
+        border-radius: 3px;
+        transition: all 0.4s ease;
+        transform-origin: center;
+      }
+      .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+      }
+
+      body.dark-mode .nav-toggle span {
+        background: #a5d6a7;
+      }
+
+      footer {
+        background-color: #263238;
+        color: white;
+        text-align: center;
+        padding: 18px 15px;
+        font-size: 14px;
+        user-select: none;
+        flex-shrink: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        margin-top: auto;
+        transition: background-color 0.3s;
+      }
+      body.dark-mode footer {
+        background-color:  #004d40;
+      }
+
+      @media (max-width: 768px) {
+        .nav-toggle {
+          display: flex;
+        }
+        .nav-links {
+          flex-direction: column;
+          background-color: #004d40;
+          position: fixed;
+          top: 60px;
+          right: 0;
+          width: 75%;
+          max-width: 320px;
+          height: 100vh;
+          padding-top: 30px;
+          box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+          transform: translateX(100%);
+          transition: transform 0.35s ease-in-out;
+          z-index: 1500;
+        }
+        .nav-links.active {
+          transform: translateX(0);
+        }
+        .nav-links li {
+          margin-bottom: 25px;
+          text-align: center;
+        }
+        .nav-links li a {
+          font-size: 1.3rem;
+          color: #b2dfdb;
+          font-weight: 700;
+          transition: color 0.3s ease;
+        }
+        .nav-links li a:hover,
+        .nav-links li a:focus {
+          color: #e0f2f1;
+          outline: none;
+        }
+      }
+    /* MAIN CONTENT */
+    main {
+        flex: 1;
+        padding: 40px 20px;
+        max-width: 900px;
+        margin: 0 auto;
+        width: 100%;
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    .results-card {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-bottom: 30px;
+        transition: background 0.3s, box-shadow 0.3s;
+    }
+    body.dark-mode .results-card {
+        background: #333;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        color: #004d40;
+        margin-bottom: 20px;
+    }
+    body.dark-mode h1 {
+        color: #a5d6a7;
+    }
+
+    .score-summary {
+        margin-bottom: 25px;
+    }
+
+    .score-summary p {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #4a4a4a;
+        margin: 5px 0;
+    }
+    body.dark-mode .score-summary p {
+        color: #ccc;
+    }
+
+    .percentage-text {
+        font-size: 3.5rem;
+        font-weight: bold;
+        color: #00796b;
+        display: block;
+        margin: 10px 0;
+    }
+    body.dark-mode .percentage-text {
+        color: #04b698;
+    }
+
+    /* Learning Plan Alert */
+    .plan-alert {
+        padding: 15px;
+        border-radius: 10px;
+        background-color: #e8f5e9; /* Light Green */
+        color: #1b5e20; /* Dark Green */
+        font-weight: 600;
+        margin-top: 20px;
+        border: 1px solid #c8e6c9;
+    }
+    body.dark-mode .plan-alert {
+        background-color: #1f3d24;
+        color: #a5d6a7;
+        border-color: #2e4e34;
+    }
+
+    /* Chapter Status Section */
+    .chapter-statuses-section h2 {
+        font-size: 1.8rem;
+        color: #004d40;
+        margin-bottom: 15px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid #e0f2f1;
+    }
+    body.dark-mode .chapter-statuses-section h2 {
+        color: #04b698;
+        border-bottom-color: #444;
+    }
+
+    .chapter-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .chapter-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    body.dark-mode .chapter-item {
+        background-color: #444;
+    }
+
+    .chapter-item.mastered {
+        background-color: #e8f5e9; /* Light Green */
+        border-left: 5px solid #4caf50;
+    }
+    .chapter-item.needs-review {
+        background-color: #fffde7; /* Light Yellow */
+        border-left: 5px solid #ffb300;
+    }
+    body.dark-mode .chapter-item.mastered {
+        background-color: #1f3d24;
+        border-left-color: #a5d6a7;
+    }
+    body.dark-mode .chapter-item.needs-review {
+        background-color: #5d4037;
+        border-left-color: #ffcc80;
+    }
+
+    .chapter-title {
+        font-weight: 600;
+        font-size: 1.1rem;
+        flex-grow: 1;
+        text-align: left;
+    }
+
+    .status-badge {
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        min-width: 120px;
+        text-align: center;
+        margin-left: 15px;
+    }
+
+    .status-badge.mastered {
+        background-color: #4caf50;
+        color: white;
+    }
+
+    .status-badge.needs-review {
+        background-color: #ff9800;
+        color: white;
+    }
+
+    .score-detail {
+        font-size: 1rem;
+        color: #757575;
+        margin-left: 15px;
+        min-width: 40px;
+    }
+    body.dark-mode .score-detail {
+        color: #ccc;
+    }
+
+    /* Action Button */
+    .view-plan-btn {
+        display: block;
+        width: 100%;
+        max-width: 400px;
+        margin: 30px auto 0 auto;
+        padding: 15px 25px;
+        border: none;
+        border-radius: 10px;
+        background-color: #00796b;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .view-plan-btn:hover {
+        background-color: #004d40;
+        transform: translateY(-2px);
+    }
+    body.dark-mode .view-plan-btn {
+        background-color: #04b698;
+    }
+    body.dark-mode .view-plan-btn:hover {
+        background-color: #00796b;
+    }
+
+    @media (max-width: 600px) {
+        .chapter-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .chapter-title {
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        .score-detail, .status-badge {
+            margin-left: 0;
+            margin-top: 5px;
+        }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="results-card">
+        <h1>{{ category.name }} Quiz Netijeleri</h1>
+        
+        <div class="score-summary">
+            <p>Dogry jogap sany:</p>
+            <span class="percentage-text">{{ total_score }} / {{ total_questions }}</span>
+            <p>Umumy üstünlik: **{{ percentage }}%**</p>
+        </div>
+
+        {% if plan_created %}
+            <div class="plan-alert">
+                <p><strong>Okuw Meýilnamasy döredildi!</strong></p>
+                <p>Synagyň netijelerine görä <b>gözden geçirmeli</b> bölümler üçin täze okuw meýilnamasy awtomatiki ýasaldy.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="chapter-statuses-section">
+        <h2>Bölümler boýunça Netijeler</h2>
+        <ul class="chapter-list">
+            {% for chapter_id, data in chapter_statuses.items %}
+                {% with chapter_obj=data.chapter %}
+                
+                {% with sanitized_status=data.status|lower|slugify %}
+                <li class="chapter-item {{ sanitized_status }}">
+                    <span class="chapter-title">{{ chapter_obj.title }}</span>
+                    <span class="score-detail">({{ data.correct }}/{{ data.total }})</span>
+                    
+                    {% if data.status == 'mastered' %}
+                        <span class="status-badge mastered">Tamamlandy</span>
+                    {% else %}
+                        <span class="status-badge needs-review">Gözden geçirmeli</span>
+                    {% endif %}
+                </li>
+                {% endwith %}
+                {% endwith %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <a href="{% url 'view_learning_plan' category_slug=category.slug %}" class="view-plan-btn">
+        Täze Okuw Meýilnamany Gör
+    </a>
+
+</main>
+{% endblock %}
